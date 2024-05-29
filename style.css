@@ -52,5 +52,5 @@ body #container #btn {
 }
 body #container #btn:active {
   transform: translateY(4px);
-  box-shadow: none;
+  box-shadow: n;
 }/*# sourceMappingURL=style.css.map */

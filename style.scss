@@ -36,6 +36,7 @@ body{
           box-shadow: none;
           transform: translateY(4px);
         }
+        
       }
     }
     #btn{
@@ -47,7 +48,7 @@ body{
       box-shadow: 0 4px 0 #d1483f;
       &:active{
         transform: translateY(4px);
-        box-shadow: none;
+        box-shadow: n;
       }
     }
   }
