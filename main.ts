@@ -1,4 +1,4 @@
-'user strict'
+'use strict'
 
 {
   class Panel{
@@ -23,17 +23,19 @@
       if(this.el.textContent && this._game.getCurrentNum() === parseInt(this.el.textContent,10)){
         this.el.classList.add('pressed')
         this._game.addCurrentNum()
-        if(this._game.getCurrentNum() === 4)
+        if(this._game.getCurrentNum() === this._game.getLevel() ** 2)
           clearTimeout(this._game.getTimeoutId())
       }
     }
   }
   class Board{
     private panels:Panel[]
+    private _game:any
     constructor(game:Game){
       this.panels = []
-      for(let i = 0; i < 4;i++){
-        this.panels.push(new Panel(game))
+      this._game = game
+      for(let i = 0; i < this._game.getLevel()**2;i++){
+        this.panels.push(new Panel(this._game))
       }
       this.setup()
     }
@@ -44,7 +46,10 @@
       })
     }
     activate(){
-      const nums = [0, 1, 2, 3,]
+      let nums:number[] = []
+      for(let i = 0; i < this._game.getLevel()**2;i++){
+        nums.push(i)
+      }
       this.panels.forEach(panel=>{
         const num = nums.splice(Math.floor(Math.random()*nums.length),1)[0]
         panel.activate(num)
@@ -53,12 +58,14 @@
   }
 
   class Game{
-    private board = new Board(this)
+    private board:any
     private currentNum = 0
     private timeoutId:any = undefined
     private startTime:any = undefined
-    constructor(){
-      // let board = new Board(this)
+    private level:number|any
+    constructor(level:number){
+      this.level = level
+      this.board = new Board(this)
       const btn = document.getElementById('btn')
       btn?.addEventListener('click',()=>{
         this.start()
@@ -94,11 +101,11 @@
     getTimeoutId(){
       return this.timeoutId
     }
+    getLevel(){
+      return this.level
+    }
 
   }
 
-  new Game()
-  
-  
-  
+  new Game(3)
 }
