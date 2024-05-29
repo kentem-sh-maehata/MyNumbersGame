@@ -3,7 +3,9 @@
 {
   class Panel{
     private el:HTMLElement
-    constructor(){
+    private _game
+    constructor(game:Game){
+      this._game = game
       this.el = document.createElement('li')
       this.el.classList.add('pressed')
       this.el.addEventListener('click',()=>{
@@ -18,20 +20,20 @@
       this.el.textContent = num.toString()
     }
     check(){
-      if(this.el.textContent && Game.currentNum === parseInt(this.el.textContent,10)){
+      if(this.el.textContent && this._game.getCurrentNum() === parseInt(this.el.textContent,10)){
         this.el.classList.add('pressed')
-        Game.currentNum++
-        if(Game.currentNum === 4)
-          clearTimeout(Game.timeoutId)
+        this._game.addCurrentNum()
+        if(this._game.getCurrentNum() === 4)
+          clearTimeout(this._game.getTimeoutId())
       }
     }
   }
   class Board{
     private panels:Panel[]
-    constructor(){
+    constructor(game:Game){
       this.panels = []
       for(let i = 0; i < 4;i++){
-        this.panels.push(new Panel())
+        this.panels.push(new Panel(game))
       }
       this.setup()
     }
@@ -51,12 +53,12 @@
   }
 
   class Game{
-    private board = new Board()
-    public static currentNum = 0
-    public static timeoutId:any = undefined
+    private board = new Board(this)
+    private currentNum = 0
+    private timeoutId:any = undefined
     private startTime:any = undefined
     constructor(){
-      
+      // let board = new Board(this)
       const btn = document.getElementById('btn')
       btn?.addEventListener('click',()=>{
         this.start()
@@ -64,10 +66,10 @@
       
     }
     start(){
-      if(typeof Game.timeoutId !== 'undefined'){
-        clearTimeout(Game.timeoutId)
+      if(typeof this.timeoutId !== 'undefined'){
+        clearTimeout(this.timeoutId)
       }
-      Game.currentNum = 0
+      this.currentNum = 0
       this.board.activate()
       
       this.startTime = Date.now()
@@ -78,10 +80,21 @@
       if(timer)
         timer.textContent = ((Date.now() - this.startTime) / 1000).toFixed(2)
       
-      Game.timeoutId = setTimeout(() => {
+      this.timeoutId = setTimeout(() => {
         this.runTimer();
       },10)
     }
+
+    addCurrentNum(){
+      this.currentNum ++
+    }
+    getCurrentNum(){
+      return this.currentNum
+    }
+    getTimeoutId(){
+      return this.timeoutId
+    }
+
   }
 
   new Game()
