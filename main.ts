@@ -70,7 +70,14 @@
       btn?.addEventListener('click',()=>{
         this.start()
       })
-      
+      this.setup()
+    }
+    setup(){
+      const container = document.getElementById('container')
+      const PANEL_WIDTH = 50
+      const BOARD_PADDING = 10
+      if(container)
+        container.style.width = PANEL_WIDTH * this.level + BOARD_PADDING * 2 + 'px'
     }
     start(){
       if(typeof this.timeoutId !== 'undefined'){
@@ -107,5 +114,5 @@
 
   }
 
-  new Game(3)
+  new Game(5)
 }
